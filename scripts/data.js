@@ -336,7 +336,7 @@ var MAPPING = {
 	"757413" : "Florida",
 	"5154e6" : "New York",
 	"0b4544" : "Pennsylvania",
-	"1a1c6c" : "West Virginia",
+	"206463" : "West Virginia",
 	"2d7b7a" : "Virginia",
 	"45c6c6" : "North Carolina",
 	"51e6e6" : "South Carolina",
