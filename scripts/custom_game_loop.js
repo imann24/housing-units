@@ -1,7 +1,7 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/*
+ * Author: Isaiah Mann, Smith College, 2015
+ * Description: Subclassed from Florian Block's GameLoop class.
+ * Runs the update loop for the app's logic
  */
 
 /**
@@ -33,10 +33,10 @@ CustomGameLoop.prototype.initialize = function (canvas) {
         _this.visualMap = new VisualMap(
                 this.getStates(),
                 _this.canvas,
-                "assets/state_hittest_map.png");  
+                "assets/state_hittest_map.png");
         _this.statePanel = _this.visualMap.getStatePanel();
     };
-   
+
 };
 
 /**
@@ -45,8 +45,8 @@ CustomGameLoop.prototype.initialize = function (canvas) {
  * @returns {undefined}
  */
 CustomGameLoop.prototype.draw = function(g) {
-    
-    if (this.visualMap !== null) {       
+
+    if (this.visualMap !== null) {
         if (this.statePanel.stateGraphActive()) {
             this.statePanel.drawStateGraph(g);
         } else {
@@ -109,7 +109,7 @@ CustomGameLoop.prototype.onPointerEnter = function(id, position) {
 CustomGameLoop.prototype.onPointerMove = function(id, position) {
     var x = position.getX();
     var y = position.getY();
-    
+
     this.pointerManager.onPointerMove(id, position);
     if (this.visualMap !== null) {
         this.statePanel.hitTest(x, y);
@@ -130,24 +130,24 @@ CustomGameLoop.prototype.onPointerActivate = function(id, position) {
     var x = position.getX();
     var y = position.getY();
     this.pointerManager.onPointerActivate(id, position);
-    
+
     if (this.statePanel.hitTest(x, y)) {
         this.statePanel.processClick(x, y);
         // Exits the function here to avoid unselecting
         // and selecting a state with the same click
         return;
     }
-    
+
     if (this.visualMap.hitTest(
             x,
             y,
             this.pointerManager.getTransformationMatrix())) {
-    
+
                 this.visualMap.addActiveStateToPanel();
-            
+
     }
-    
-    
+
+
 };
 
 /**
@@ -180,13 +180,13 @@ CustomGameLoop.prototype.onPointerLeave = function(id, position) {
  */
 CustomGameLoop.prototype.addCanvas = function (width, height, canvasID) {
     var canvas = document.createElement('canvas');
-    
+
     if (typeof(canvasID) !== "undefined") {
         canvas.id = canvasID;
     }
-    
+
     document.body.appendChild(canvas);
-    
+
     canvas.height = width;
     canvas.width = height;
     canvas.style.position = "absolute";

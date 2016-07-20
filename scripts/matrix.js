@@ -1,3 +1,8 @@
+/*
+ * Author: Florian Block, Smith College, 2015
+ * Description: Custom matrix class for transofmrations
+ */
+
 function Matrix(m, n) {
     this.m = m;
     this.n = n;
@@ -111,11 +116,11 @@ Matrix.prototype.toString = function() {
         }
         returnString += outputLine + "\n";
     }
-    
+
     var returnString = "";
     var brackets = " _";
     while (brackets.length < this.m * (maxDigits + 2) + (this.m - 1) + 2) {
-        brackets += " ";    
+        brackets += " ";
     }
     brackets += "_ \n";
     returnString += brackets;
@@ -132,7 +137,7 @@ Matrix.prototype.toString = function() {
             }
             outputLine += alignedValue + (m < this.m - 1 ? " " : "");
         }
-        returnString += outputLine + 
+        returnString += outputLine +
                 (n < this.data.length - 1 ? " |\n" : "_|\n");
     }
     return returnString;
@@ -169,61 +174,61 @@ Matrix.prototype.getInverse = function() {
     var a32 = this.get(1, 2);
     var a33 = this.get(2, 2);
     var d = this.getDeterminant();
-    
+
     var m00 = new Matrix(2, 2);
     m00.set(0, 0, a22);
     m00.set(1, 0, a23);
     m00.set(0, 1, a32);
     m00.set(1, 1, a33);
-    
+
     var m10 = new Matrix(2, 2);
     m10.set(0, 0, a13);
     m10.set(1, 0, a12);
     m10.set(0, 1, a33);
     m10.set(1, 1, a32);
-    
+
     var m20 = new Matrix(2, 2);
     m20.set(0, 0, a12);
     m20.set(1, 0, a13);
     m20.set(0, 1, a22);
     m20.set(1, 1, a23);
-    
+
     var m01 = new Matrix(2, 2);
     m01.set(0, 0, a23);
     m01.set(1, 0, a21);
     m01.set(0, 1, a33);
     m01.set(1, 1, a31);
-    
+
     var m11 = new Matrix(2, 2);
     m11.set(0, 0, a11);
     m11.set(1, 0, a13);
     m11.set(0, 1, a31);
     m11.set(1, 1, a33);
-    
+
     var m21 = new Matrix(2, 2);
     m21.set(0, 0, a13);
     m21.set(1, 0, a11);
     m21.set(0, 1, a23);
     m21.set(1, 1, a21);
-    
+
     var m02 = new Matrix(2, 2);
     m02.set(0, 0, a21);
     m02.set(1, 0, a22);
     m02.set(0, 1, a31);
     m02.set(1, 1, a32);
-    
+
     var m12 = new Matrix(2, 2);
     m12.set(0, 0, a12);
     m12.set(1, 0, a11);
     m12.set(0, 1, a32);
     m12.set(1, 1, a31);
-    
+
     var m22 = new Matrix(2, 2);
     m22.set(0, 0, a11);
     m22.set(1, 0, a12);
     m22.set(0, 1, a21);
     m22.set(1, 1, a22);
-    
+
     returnMatrix.set(0, 0, m00.getDeterminant() / d);
     returnMatrix.set(1, 0, m10.getDeterminant() / d);
     returnMatrix.set(2, 0, m20.getDeterminant() / d);
@@ -233,7 +238,7 @@ Matrix.prototype.getInverse = function() {
     returnMatrix.set(0, 2, m02.getDeterminant() / d);
     returnMatrix.set(1, 2, m12.getDeterminant() / d);
     returnMatrix.set(2, 2, m22.getDeterminant() / d);
-    
+
     return returnMatrix;
 }
 

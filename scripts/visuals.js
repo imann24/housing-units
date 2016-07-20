@@ -1,7 +1,6 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/*
+ * Author: Isaiah Mann, Smith College, 2015
+ * Description: Visual logic and behavior for the app
  */
 
 /**
@@ -14,7 +13,7 @@
  */
 function VisualMap (listOfStates, canvas, mapURL) {
     var _this = this;
-    
+
     /**
      * List of States
      * @private
@@ -22,55 +21,55 @@ function VisualMap (listOfStates, canvas, mapURL) {
      * @description All the states and their population & housing data
      */
     this.listOfStates = listOfStates;
-    
+
     /**
      * @private
      * @type State
      * @description The currently selected state
      */
     this.activeState = null;
-    
+
     /**
      * @private
      * @type RGBImageData
      * @description The image data of the picture of the states
      */
     this.imageData;
-    
+
     /**
      * @private
      * @type Image
      * @description The image of the states
      */
     this.mapImage = new Image();
-    
+
     /**
      * @private
      * @type String
      * @description The file location of the map image
      */
     this.mapImage.src = mapURL;
-    
+
     this.imageScale = 0.65;
     this.canvas = canvas;
     this.mapImage.onload = function () {
         //var bufferedCanvas = _this.initializeBuffer(_this.mapImage);
         _this.imageScale = _this.calculateScale(_this.mapImage);
-        _this.imageData = _this.initializeRGBImageData (_this.mapImage, 
+        _this.imageData = _this.initializeRGBImageData (_this.mapImage,
                                    _this.canvas,
                                    _this.canvas.getContext("2d"),
                                    _this.imageScale);
     };
-    
+
     this.debugger = new Debugger();
-    
+
     this.formatter = new NumberFormatter();
-    
+
     this.statePanel = new StatePanel(
             4,
             ORIENTATION.RIGHT
            );
-   
+
 };
 
 /**
@@ -97,9 +96,9 @@ VisualMap.prototype.initializeBuffer = function (image) {
  */
 VisualMap.prototype.initializeRGBImageData = function (image, canvas, g, scale) {
     g.drawImage(image, 0, 0,
-                image.width * scale, 
+                image.width * scale,
                 image.height * scale);
-    return imageData = new RGBImageData(image, 
+    return imageData = new RGBImageData(image,
                                    canvas.getContext("2d"));
                                    console.log("Generated the image data");
 };
@@ -123,8 +122,8 @@ VisualMap.prototype.draw = function (g, transformMatrix) {
             transformMatrix.get(2, 1)
             );
 
-    g.drawImage(this.mapImage, 0, 0, 
-                this.mapImage.width * this.imageScale, 
+    g.drawImage(this.mapImage, 0, 0,
+                this.mapImage.width * this.imageScale,
                 this.mapImage.height * this.imageScale);
     g.restore();
     this.displayActiveState(g,
@@ -158,38 +157,38 @@ VisualMap.prototype.calculateScale = function (image) {
 VisualMap.prototype.hitTest = function (x, y, transformMatrix) {
     x = parseInt(x);
     y = parseInt(y);
-    
+
     var currentCoordinate = Matrix.fromPoint((new Point(x, y)));
-   
+
     var transformedCoordinate = transformMatrix.getInverse().multiply(currentCoordinate);
-    
+
     // Inverse Matrix was returning decimals which needed to be rounded to work with pixel data
     var transformedX = parseInt(transformedCoordinate.get(0, 0));
     var transformedY = parseInt(transformedCoordinate.get(0, 1));
-    
-    this.debugger.setLine(2, 
+
+    this.debugger.setLine(2,
             "Hit Test: " +
-            "(" + 
+            "(" +
             transformedX.toString() +
             ", " +
-            transformedY.toString() + 
+            transformedY.toString() +
             ")");
-    
-    if (this.imageData === null || 
+
+    if (this.imageData === null ||
             !this.inBounds(transformedX,
                             transformedY)) {
         return;
     }
-    
+
     var pixel = this.imageData.getPixelData(transformedX,
                                             transformedY);
-    
+
     this.activeState = this.getStateFromColor(
                 pixel["red"],
                 pixel["green"],
                 pixel["blue"]
             );
-    
+
     if (this.activeState === null) {
         return false;
     } else {
@@ -211,7 +210,7 @@ VisualMap.prototype.inBounds = function (x, y) {
 
 /**
  * A text display of the active state and its information
- * @param {GraphicsContext2D} g The graphics of the canvas being drawn to 
+ * @param {GraphicsContext2D} g The graphics of the canvas being drawn to
  * @param {int} x The x position of the text box
  * @param {int} y The y position of the text box
  * @returns {undefined}
@@ -230,23 +229,23 @@ VisualMap.prototype.displayActiveState = function (g, x, y) {
     g.fillStyle = "white";
     g.font = fontSize + 'px Times';
     if (this.activeState === null) {
-        g.fillText("Hover over a state", 
-                    x + xOffset, 
+        g.fillText("Hover over a state",
+                    x + xOffset,
                     y + yOffset);
-        g.fillText("to view housing data", 
-                    x + xOffset, 
+        g.fillText("to view housing data",
+                    x + xOffset,
                     y + yOffset * 2);
     } else {
-        g.fillText(this.activeState.getName(), 
-                    x + xOffset, 
+        g.fillText(this.activeState.getName(),
+                    x + xOffset,
                     y + yOffset);
-        g.fillText("Population: " + 
+        g.fillText("Population: " +
                 this.formatter.addCommas(this.activeState.getPopulation()),
-                    x + xOffset, 
+                    x + xOffset,
                     y + yOffset * 2);
-        g.fillText("Housing Units: " + 
-                this.formatter.addCommas(this.activeState.getHousingUnits()), 
-                    x + xOffset, 
+        g.fillText("Housing Units: " +
+                this.formatter.addCommas(this.activeState.getHousingUnits()),
+                    x + xOffset,
                     y + yOffset * 3);
     }
 };
@@ -274,13 +273,13 @@ VisualMap.prototype.getStateByName = function (stateName) {
     if (stateName === null) {
         return;
     }
-    
+
     for (var i = 0; i < this.listOfStates.length; i++) {
         if (stateName === this.listOfStates[i].getName()) {
-            return this.listOfStates[i];   
+            return this.listOfStates[i];
         }
     }
-    
+
     return null;
 };
 
@@ -323,13 +322,13 @@ Debugger.prototype.draw = function (g) {
     g.fillRect(0, 0, 250, 125);
     g.fillStyle = "white";
     g.font = "20px arial";
-    
+
     if (this.line1 === null) {
         g.fillText("Dimensions: " + Scaler.screenWidth + "x" + Scaler.screenHeight, 25, 50);
     } else {
         g.fillText(this.line1, 25, 50);
     }
-    
+
     if (this.line2 === null) {
         g.fillText("Pixel Ratio: " + window.devicePixelRatio, 25, 100);
     } else {
@@ -349,7 +348,7 @@ Debugger.prototype.setLine = function (index, text) {
     } else if (index === 2) {
         this.line2 = text;
     }
-};      
+};
 
 
 /**
@@ -376,7 +375,7 @@ HitTestableBox.prototype.hitTest = function (x, y) {
     return x >= this.x &&
         x <= this.x + this.width &&
         y >= this.y &&
-        y <= this.y + this.height;              
+        y <= this.y + this.height;
 };
 
 /**
@@ -405,7 +404,7 @@ StateBox.prototype = new HitTestableBox();
  * @returns {undefined}
  */
 StateBox.prototype.draw = function (g) {
-    
+
     g.fillStyle = TRANSLUSCENT_BLACK;
     g.fillRect(
         this.x,
@@ -413,20 +412,20 @@ StateBox.prototype.draw = function (g) {
         this.width,
         this.height
     );
-    
+
     g.fillStyle = "white";
-    
+
     g.font = "20px Times";
     g.fillText(
-            this.state === null ? 
+            this.state === null ?
                 this.emptyMessage :
                         this.state.getName(),
                 this.x + this.width/16,
                 this.y + this.height/2.5);
-    
+
     g.font = "13px arial";
     g.fillText(
-            this.state === null ? 
+            this.state === null ?
                 this.defaultMessage :
                         this.unselectMessage,
                 this.x + this.width/16,
@@ -507,11 +506,11 @@ StateBox.prototype.getState = function () {
  */
 function StatePanel (stateCount, orientation) {
     var _this = this;
-    
+
     // Set in the generateStateBoxes function
     this.x;
     this.y;
-    
+
     this.stateCount = stateCount;
     this.orientation = orientation;
     this.stateBoxes = this.generateStateBoxes();
@@ -526,7 +525,7 @@ function StatePanel (stateCount, orientation) {
                 },
                 "Compare"
             );
-    
+
     this.clearButton = new Button (
                 this.x,
                 this.y - Scaler.screenHeight/16,
@@ -535,12 +534,12 @@ function StatePanel (stateCount, orientation) {
                 },
                 "Clear All"
     );
-    
+
     this.buttons = [
       this.compareButton,
       this.clearButton
     ];
-    
+
     this.stateGraph = null;
 }
 
@@ -554,17 +553,17 @@ StatePanel.prototype.generateStateBoxes = function () {
     var height = firstBox.getDimensions().height;
     var width = firstBox.getDimensions().width;
     var padding = height/2;
-    
+
     this.x = this.orientation.x - width;
     firstBox.setPosition(
             this.x,
             this.y = this.getBoxYPosition(0,
-                                 height, 
+                                 height,
                                  padding)
            );
-    
+
     stateBoxes.push(firstBox);
-    
+
     for (var i = 1; i < this.stateCount; i++) {
        stateBoxes.push(
                 new StateBox (
@@ -573,7 +572,7 @@ StatePanel.prototype.generateStateBoxes = function () {
                 )
                );
     }
-    
+
     return stateBoxes;
 };
 
@@ -586,7 +585,7 @@ StatePanel.prototype.draw = function (g) {
   for (var i = 0; i < this.stateCount; i++) {
       this.stateBoxes[i].draw(g);
   }
-  
+
   for (var i = 0; i < this.buttons.length; i++) {
       this.buttons[i].draw(g);
   }
@@ -637,7 +636,7 @@ StatePanel.prototype.containsState = function (state) {
             return true;
         }
     }
-    
+
     return false;
 };
 
@@ -665,9 +664,9 @@ StatePanel.prototype.hitTest = function (x, y) {
             return true;
         }
     }
-    
+
     return false;
-    
+
 };
 
 /*
@@ -682,7 +681,7 @@ StatePanel.prototype.hitTestButtons = function (x, y) {
             return true;
         }
     }
-    
+
     return false;
 };
 
@@ -715,7 +714,7 @@ StatePanel.prototype.processClick = function (x, y) {
 
                  this.stateBoxes[i].toggleState(null);
              }
-         }  
+         }
     } else {
         if (this.stateGraph.hitTest(x, y)) {
             this.stateGraph.processClick(x, y);
@@ -758,7 +757,7 @@ StatePanel.prototype.currentStateCount = function () {
  * @param {State[]} states The stored states
  * @returns {undefined}
  */
-StatePanel.prototype.loadGraph = function (states) {    
+StatePanel.prototype.loadGraph = function (states) {
     console.log("Loading the graph");
     var _this = this;
     this.stateGraph = new StateGraph (
@@ -833,7 +832,7 @@ function StateGraph (states, spacing, x, y, statePanel) {
         },
         "Back"
     );
-    
+
 }
 
 /**
@@ -844,11 +843,11 @@ function StateGraph (states, spacing, x, y, statePanel) {
 StateGraph.prototype.draw = function (g) {
     g.fillStyle = "grey";
     g.fillRect(0, 0, Scaler.screenWidth, Scaler.screenHeight);
-    
+
     for (var i = 0; i < this.barGraphStates.length; i++) {
         this.barGraphStates[i].draw(g);
     }
-    
+
     this.key.draw(g);
     this.backButton.draw(g);
 };
@@ -872,7 +871,7 @@ StateGraph.prototype.generateBarGraphStates = function () {
             )
         );
     }
-    
+
     return barGraphStates;
 };
 
@@ -886,11 +885,11 @@ StateGraph.prototype.hitTest = function (x, y) {
     for (var i = 0; i < this.barGraphStates.length; i++) {
         this.barGraphStates[i].hitTest(x, y);
     }
-    
+
     if (this.backButton.hitTest(x, y)) {
         return true;
     }
-    
+
 };
 
 /**
@@ -911,16 +910,16 @@ StateGraph.prototype.processClick = function (x, y) {
  */
 StateGraph.prototype.calculateScale = function () {
     var max = 0;
-    for (var i = 0; i < this.states.length; i++) {        
+    for (var i = 0; i < this.states.length; i++) {
         if (this.states[i].getPopulation() > max) {
             max = this.states[i].getPopulation();
-        } 
-        
+        }
+
         if (this.states[i].getHousingUnits() > max) {
             max = this.states[i].getHousingUnits();
-        } 
+        }
     }
-    
+
     return (Scaler.screenHeight/Scaler.pixelRatio * (5/6))/(max);
 };
 
@@ -959,8 +958,8 @@ function BarGraphState (state, x, y, populationColor, housingColor, scale) {
             this.x,
             this.y,
             populationColor
-    ); 
-    
+    );
+
     this.housingBar = new Bar (
             state.getHousingUnits(),
             this.scale,
@@ -1033,7 +1032,7 @@ Bar.prototype.draw = function (g) {
             this.width,
             this.getHeight()
     );
-    
+
     if (this.valueShown) {
         g.font = "20px times";
         g.fillStyle = "white";
@@ -1042,11 +1041,11 @@ Bar.prototype.draw = function (g) {
             this.x,
             Math.min(
                 this.y - this.getHeight() + Scaler.screenHeight/64,
-                this.y    
+                this.y
             )
         )
     }
-    
+
 };
 
 /**
@@ -1093,7 +1092,7 @@ function Key (colors, labels, x, y) {
     // Label and color array sshould be the same length
     this.colors = colors;
     this.labels = labels;
-    
+
     this.x = x;
     this.y = y;
     this.spacing = Scaler.screenHeight/16;
@@ -1105,7 +1104,7 @@ function Key (colors, labels, x, y) {
  * @returns {undefined}
  */
 Key.prototype.draw = function (g) {
-    
+
     for (var i = 0; i < this.labels.length; i++) {
         g.fillStyle = this.colors[i];
         g.fillRect(
@@ -1159,21 +1158,21 @@ Button.prototype.onClick = function () {
  * @returns {undefined}
  */
 Button.prototype.draw = function (g) {
-    
+
     g.fillStyle = TRANSLUSCENT_BLACK;
     g.fillRect(
-            this.x, 
-            this.y, 
-            this.width, 
+            this.x,
+            this.y,
+            this.width,
             this.height
         );
-    
-            
+
+
     g.fillStyle = "white";
     g.font = "30px arial";
     g.fillText(
-            this.text, 
+            this.text,
             this.x + this.width/8,
             this.y + this.height/1.5);
-           
+
 };

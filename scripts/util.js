@@ -1,3 +1,8 @@
+/*
+ * Author: Isaiah Mann, Smith College, 2015
+ * Description: Custom classes and functions for storing and mutating low level data
+ */
+
 /**
  * @description Two dimensional array object
  * @param {int} width The width of the array
@@ -7,7 +12,7 @@
  * @return {TwoDimensionalArray}
  */
 function TwoDimensionalArray (width, height, data) {
-    
+
     this.width = width;
     this.height = height;
     this.dimensions = new Dimensions(width, height);
@@ -21,7 +26,7 @@ function TwoDimensionalArray (width, height, data) {
     } else {
         this.data = data;
     }
-    
+
     this.setIndexFunctions();
 };
 
@@ -77,14 +82,14 @@ TwoDimensionalArray.prototype.getColumns = function (columns) {
         var columnList = [];
         for (var i = 0; i < columns.length; i++) {
             columnList.push(this.data[columns[i]]);
-            
+
         }
-              
+
         return new TwoDimensionalArray(
                 columns.length,
                 this.height,
                 columnList);
-                
+
     } else if (Number.isInteger(columns)) {
         return this.data[columns];
     } else {
@@ -137,7 +142,7 @@ Dimensions.prototype.toString = function () {
     return this.width + "x" + this.height;
 };
 
-// Code from 
+// Code from
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
 // Used for the sort function
 /**
@@ -183,10 +188,10 @@ RGBToHex.prototype.componentToHex = function (c) {
 RGBToHex.prototype.getHexValue = function () {
     if (this.hexValue === null) {
         this.hexValue = this.componentToHex(this.r) +
-                        this.componentToHex(this.g) + 
+                        this.componentToHex(this.g) +
                         this.componentToHex(this.b);
     }
-    
+
     return this.hexValue;
 };
 
@@ -233,7 +238,7 @@ NumberFormatter.prototype.addCommas = function (number) {
         wholeNumber = wholeNumber.substr(1, wholeNumber.length -1);
     }
     return wholeNumber + decimal;
-    
+
 };
 
 /**
@@ -285,7 +290,7 @@ RGBImageData.prototype.parseChannelData = function (pixelData, channel) {
     var height = this.img.height;
     var channelOffset;
     var channelValues = new TwoDimensionalArray(width, height);
-    
+
     switch (channel) {
         case "red":
             channelOffset = 0;
@@ -303,19 +308,19 @@ RGBImageData.prototype.parseChannelData = function (pixelData, channel) {
             channelOffset = 0;
             console.log("invalid channel input: " + channel);
     }
-    
+
     for (var i = 0; i < pixelData.length; i+=4) {
         var arrayPosition = this.getPositionFromPixelIndex(
-                                pixelIndex, 
+                                pixelIndex,
                                 width);
         channelValues.set(
             arrayPosition.getX(),
-            arrayPosition.getY(), 
+            arrayPosition.getY(),
             pixelData[i + channelOffset]);
-        
+
         pixelIndex++;
     }
-    
+
     return channelValues;
 };
 
@@ -339,7 +344,7 @@ RGBImageData.prototype.getPixelData = function (x, y){
  * @returns {Point}
  */
 RGBImageData.prototype.getPositionFromPixelIndex = function (pixelIndex, width) {
-    return new Point(pixelIndex%width, 
+    return new Point(pixelIndex%width,
                     parseInt(pixelIndex/width));
 };
 

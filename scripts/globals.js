@@ -1,7 +1,6 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/*
+ * Author: Isaiah Mann, Smith College, 2015
+ * Description: Constant vars for app
  */
 
 var CANVAS_ID = "map";

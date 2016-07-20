@@ -1,7 +1,6 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/*
+ * Author: Isaiah Mann, Smith College, 2015
+ * Description: Custom classes to access state data via JS
  */
 
 /**
@@ -46,10 +45,10 @@ State.prototype.getHousingUnits = function () {
  * @description Class to store a list of states
  * @returns {StateData}
  * @constructor
- */ 
+ */
 function StateData () {
     this.states = null;
-    
+
     this.populationData = null;
     this.housingData = null;
     this.statesList = null;
@@ -107,7 +106,7 @@ StateData.prototype.dataLoaded = function () {
  * @returns {Boolean}
  */
 StateData.prototype.tryGenerateStates = function () {
-    
+
     if (this.validData()) {
         this.generateStates();
         this.onLoadStates();
@@ -123,7 +122,7 @@ StateData.prototype.tryGenerateStates = function () {
  * @returns {Boolean}
  */
 StateData.prototype.validData = function () {
-    
+
     return this.statesList !== null &&
            this.populationData !== null &&
             this.housingData !== null;
@@ -138,13 +137,13 @@ StateData.prototype.generateStates = function () {
     for (var i = 0; i < this.statesList.length; i++) {
         this.states.push(new State (
                 this.statesList[i],
-                this.populationData[1] 
+                this.populationData[1]
                     [this.locateStateDataIndex(this.statesList[i],
                         this.populationData)],
                 this.housingData[1]
                     [this.locateStateDataIndex(this.statesList[i],
                         this.housingData)]));
-    }   
+    }
 };
 
 /**
@@ -154,7 +153,7 @@ StateData.prototype.generateStates = function () {
  * @returns {int}
  */
 StateData.prototype.locateStateDataIndex = function (state, data) {
-    
+
     for (var i = 0; i < data[0].length; i++) {
         if (state === data[0][i]) {
             return i;
@@ -198,10 +197,10 @@ var CSVParser = function (filename) {
             }
         }
     );
-     
+
     this.data = null;
     this.onCSVParsed = null;
-    
+
 
 };
 
@@ -228,7 +227,7 @@ CSVParser.prototype.parseCSVAsString = function (string) {
     var csvByLine = string.split(/\r\n|\r|\n/g);
     height = csvByLine.length;
     var csvByCell = [];
-    
+
     for (var i = 0; i < height; i++) {
         csvByCell.push(csvByLine[i].split(','));
         width = Math.max(
@@ -239,13 +238,13 @@ CSVParser.prototype.parseCSVAsString = function (string) {
     var table = new TwoDimensionalArray(width, height);
     for (var x = 0; x < width; x++) {
         for (var y = 0; y < height; y++) {
-            
+
             if (typeof csvByCell[y] === 'undefined' || typeof csvByCell[y][x] === 'undefined') {
             }
             table.set(x, y, csvByCell[y][x]);
         }
     }
-    
+
     this.data = table;
     return table;
 };
@@ -266,10 +265,10 @@ function ListParser (filename) {
             }
         }
     );
-     
+
     this.data = null;
     this.onListParsed = null;
-    
+
 
 };
 

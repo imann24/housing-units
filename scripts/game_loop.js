@@ -1,3 +1,8 @@
+/*
+ * Author: Florian Block, Smith College, 2015
+ * Description: Runs update loop and core logic for app
+ */
+
 // <editor-fold desc="Point">
 function Point(x, y)
 {
@@ -35,7 +40,7 @@ Point.prototype.add = function(p) {
 
 
 Point.prototype.toString = function() {
-    return "(" + (Math.round(this.getX() * 1000) / 1000) + ", " + 
+    return "(" + (Math.round(this.getX() * 1000) / 1000) + ", " +
             (Math.round(this.getY() * 1000) / 1000) + ")";
 }
 
@@ -56,7 +61,7 @@ Point.prototype.divideBy = function(s) {
 Point.prototype.dotProduct = function(p) {
     return this.getX() * p.getX() + this.getY() * p.getY();
 }
-// </editor-fold> 
+// </editor-fold>
 
 function GameLoop() {
 }
@@ -77,40 +82,40 @@ GameLoop.prototype.initializeInput = function() {
     this.canvas.associatedGameLoop = this;
     this.canvas.onmouseenter = function(e) {
         e.preventDefault();
-        var localCoordinate = 
+        var localCoordinate =
                 this.associatedGameLoop.getLocalCanvasCoordinates(e);
         this.associatedGameLoop.onMouseEnter(localCoordinate);
     }
     this.canvas.onmousemove = function(e) {
         e.preventDefault();
-        var localCoordinate = 
+        var localCoordinate =
                 this.associatedGameLoop.getLocalCanvasCoordinates(e);
         this.associatedGameLoop.onMouseMove(localCoordinate);
     }
     this.canvas.onmousedown = function(e) {
         e.preventDefault();
-        var localCoordinate = 
+        var localCoordinate =
                 this.associatedGameLoop.getLocalCanvasCoordinates(e);
         this.associatedGameLoop.onMouseDown(localCoordinate);
     }
     this.canvas.onmouseup = function(e) {
         e.preventDefault();
-        var localCoordinate = 
+        var localCoordinate =
                 this.associatedGameLoop.getLocalCanvasCoordinates(e);
         this.associatedGameLoop.onMouseUp(localCoordinate);
     }
     this.canvas.onmouseleave = function(e) {
         e.preventDefault();
-        var localCoordinate = 
+        var localCoordinate =
                 this.associatedGameLoop.getLocalCanvasCoordinates(e);
         this.associatedGameLoop.onMouseLeave(localCoordinate);
     }
     this.canvas.ontouchstart = function(e) {
         e.preventDefault();
-        for (var i = 0; i < e.changedTouches.length; i++) 
+        for (var i = 0; i < e.changedTouches.length; i++)
         {
            var t = e.changedTouches[i];
-           var localCoordinate = 
+           var localCoordinate =
                    this.associatedGameLoop
                    .getLocalCanvasCoordinates(t.clientX, t.clientY);
            this.associatedGameLoop.onTouchStart(t.identifier, localCoordinate);
@@ -118,10 +123,10 @@ GameLoop.prototype.initializeInput = function() {
     }
     this.canvas.ontouchmove = function(e) {
         e.preventDefault();
-        for (var i = 0; i < e.changedTouches.length; i++) 
+        for (var i = 0; i < e.changedTouches.length; i++)
         {
            var t = e.changedTouches[i];
-           var localCoordinate = 
+           var localCoordinate =
                    this.associatedGameLoop
                    .getLocalCanvasCoordinates(t.clientX, t.clientY);
            this.associatedGameLoop.onTouchMove(t.identifier, localCoordinate);
@@ -129,10 +134,10 @@ GameLoop.prototype.initializeInput = function() {
     }
     this.canvas.ontouchend = function(e) {
         e.preventDefault();
-        for (var i = 0; i < e.changedTouches.length; i++) 
+        for (var i = 0; i < e.changedTouches.length; i++)
         {
            var t = e.changedTouches[i];
-           var localCoordinate = 
+           var localCoordinate =
                    this.associatedGameLoop
                    .getLocalCanvasCoordinates(t.clientX, t.clientY);
            this.associatedGameLoop.onTouchEnd(t.identifier, localCoordinate);
@@ -140,10 +145,10 @@ GameLoop.prototype.initializeInput = function() {
     }
     this.canvas.ontouchcancel = function(e) {
         e.preventDefault();
-        for (var i = 0; i < e.changedTouches.length; i++) 
+        for (var i = 0; i < e.changedTouches.length; i++)
         {
            var t = e.changedTouches[i];
-           var localCoordinate = 
+           var localCoordinate =
                    this.associatedGameLoop
                    .getLocalCanvasCoordinates(t.clientX, t.clientY);
            this.associatedGameLoop.onTouchEnd(t.identifier, localCoordinate);
@@ -173,35 +178,35 @@ GameLoop.prototype.getLocalCanvasCoordinates = function(arg1, arg2) {
 GameLoop.prototype.onMouseEnter = function(position) {
     // override
     this.onPointerEnter(
-            GameLoop.Settings.Input.MOUSE_ID, 
+            GameLoop.Settings.Input.MOUSE_ID,
             new Point(position.x, position.y));
 }
 
 GameLoop.prototype.onMouseDown = function(position) {
     // override
     this.onPointerActivate(
-            GameLoop.Settings.Input.MOUSE_ID, 
+            GameLoop.Settings.Input.MOUSE_ID,
             new Point(position.x, position.y));
 }
 
 GameLoop.prototype.onMouseUp = function(position) {
     // override
     this.onPointerDeactivate(
-            GameLoop.Settings.Input.MOUSE_ID, 
+            GameLoop.Settings.Input.MOUSE_ID,
             new Point(position.x, position.y));
 }
 
 GameLoop.prototype.onMouseMove = function(position) {
     // override
     this.onPointerMove(
-            GameLoop.Settings.Input.MOUSE_ID, 
+            GameLoop.Settings.Input.MOUSE_ID,
             new Point(position.x, position.y));
 }
 
 GameLoop.prototype.onMouseLeave = function(position) {
     // override
     this.onPointerLeave(
-            GameLoop.Settings.Input.MOUSE_ID, 
+            GameLoop.Settings.Input.MOUSE_ID,
             new Point(position.x, position.y))
 }
 
@@ -225,23 +230,23 @@ GameLoop.prototype.onTouchCancelled = function(id, position) {
 }
 
 GameLoop.prototype.onPointerEnter = function(id, position) {
-    
+
 }
 
 GameLoop.prototype.onPointerMove = function(id, position) {
-    
+
 }
 
 GameLoop.prototype.onPointerActivate = function(id, position) {
-    
+
 }
 
 GameLoop.prototype.onPointerDeactivate = function(id, position) {
-    
+
 }
 
 GameLoop.prototype.onPointerLeave = function(id, position) {
-    
+
 }
 
 GameLoop.prototype.initializeTimer = function() {
@@ -252,7 +257,7 @@ GameLoop.prototype.initializeTimer = function() {
 }
 
 GameLoop.prototype.onTimerTick = function() {
-    
+
     this.update(10);
     this.clear(this.g);
     this.draw(this.g);

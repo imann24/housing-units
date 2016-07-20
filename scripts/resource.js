@@ -1,4 +1,7 @@
-// Code by Florian Block
+/*
+ * Author: Florian Block, Smith College, 2015
+ * Description: Handles async loading for AJAX resources
+ */
 
 function Resource(url) {
     this.url = url;
@@ -19,12 +22,12 @@ function Resource(url) {
 //}
 
 Resource.prototype.beginLoad = function(
-        objectToNotify, 
+        objectToNotify,
         onLoadHandler,
         onErrorHandler) {
     if (typeof objectToNotify === 'undefined') {
         // no notification necessary
-    } else if (typeof objectToNotify != null && 
+    } else if (typeof objectToNotify != null &&
             typeof onLoadHandler === 'function') {
         this.objectToNotify = objectToNotify;
         this.onLoadHandler = onLoadHandler;

@@ -1,11 +1,10 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/*
+ * Author: Florian Block, Smith College, 2015
+ * Description: Controls input: supports touch and mouse
  */
 
 function PointerManager () {
-    
+
     this.pointers = {};
     this.pointerCount = 0;
     this.activePointerCount = 0;
@@ -17,7 +16,7 @@ function PointerManager () {
 };
 
 PointerManager.prototype.getTransformationMatrix = function () {
-    return this.transformationMatrix;  
+    return this.transformationMatrix;
 };
 
 PointerManager.prototype.onPointerEnter = function(id, position) {
@@ -33,11 +32,11 @@ PointerManager.prototype.onPointerActivate = function(id, position) {
     this.activePointerCount++;
 };
 
-PointerManager.prototype.onPointerDeactivate = function(id, 
-                                                        position, 
+PointerManager.prototype.onPointerDeactivate = function(id,
+                                                        position,
                                                         ignoreUpdateCount) {
     this.pointers[id].deactivate();
-    
+
     if (!ignoreUpdateCount) {
         this.activePointerCount--;
     }
@@ -60,8 +59,8 @@ PointerManager.prototype.addPointer = function(id, initialPosition) {
 PointerManager.prototype.movePointer = function(id, position) {
     this.pointers[id].move(position);
     this.updatePivot();
-    
-    if (this.activePointerCount > 0) {    
+
+    if (this.activePointerCount > 0) {
         this.onManipulation(this.pointers[id]);
     }
 };
@@ -101,29 +100,29 @@ PointerManager.prototype.onManipulation = function(movedPointer) {
     // translation
     var xTranslation = this.pivot.getX() - this.previousPivot.getX();
     var yTranslation = this.pivot.getY() - this.previousPivot.getY();
-    this.transformationMatrix = 
+    this.transformationMatrix =
             Matrix.getTranslate(xTranslation, yTranslation)
                 .multiply(this.transformationMatrix);
     if (this.previousPivotRadius > 0) {
         // scale
         var scale = this.pivotRadius / this.previousPivotRadius;
-        this.transformationMatrix = 
-                Matrix.getScaleAt(scale, scale, this.pivot.getX(), 
+        this.transformationMatrix =
+                Matrix.getScaleAt(scale, scale, this.pivot.getX(),
                     this.pivot.getY()).multiply(this.transformationMatrix);
 //                Matrix.getScale(scale, scale).multiply(this.transformationMatrix);
         // rotate
-        var previousDirection = 
+        var previousDirection =
                 movedPointer.getPreviousPosition().subtract(this.pivot);
         var currentDirection =
                 movedPointer.getPosition().subtract(this.pivot);
-//        
-        var angle = 
-                (Math.atan2(previousDirection.getX(), 
-                    previousDirection.getY()) - 
+//
+        var angle =
+                (Math.atan2(previousDirection.getX(),
+                    previousDirection.getY()) -
                 Math.atan2(currentDirection.getX(), currentDirection.getY())) /
                 this.pointerCount;
         this.transformationMatrix =
-                Matrix.getRotationAt(angle, 
+                Matrix.getRotationAt(angle,
                     this.pivot.getX(), this.pivot.getY()).multiply(
                             this.transformationMatrix);
 //        var test = true;
